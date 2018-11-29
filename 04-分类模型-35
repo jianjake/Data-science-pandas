@@ -1,0 +1,99 @@
+在1994年的机器学习峰会和计算学习理论峰会上，每一位提前注册的出席者都收到印有“+”或“-”标记的一个徽章。标记的生成是以出席者的名字作为输入，通过一些函数运算生成的。现在，我们想根据已有的数据训练模型，来推断什么样的名字对应哪个标记。
+
+数据说明
+本题原始数据来自UCI里的数据集Badges Data Set。数据集一共包含1个特征变量，1个类别变量（badges，即“+”或“-”），共294个样本。测试模型时，将从各类别中分别抽取80%的数据作为训练集，用剩余样本进行分类结果测试
+
+列名	说明	类型	示例
+name	出席者名字	String	Anselm Blumer
+badge	徽章标记，1为“+”，0为“-”	Int	1
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+df_trainx	训练集x	DataFrame
+df_trainy	训练集y	DataFrame
+df_testx	测试集x	DataFrame
+答题要求
+要求基于测试集，根据选择的模型给出预测结果predict_value以及预测标签为1的概率predict_prob，并且为ndarray、series或者DataFrame对象，用于后台对本题正误进行判断及对模型进行评估；
+请不要打乱测试样本的顺序，防止模型评估出现偏差。
+
+import numpy as np
+import copy
+
+
+def str_dis(s1, s2):
+    # 矩阵的下标得多一个
+    len_str1 = len(s1) + 1
+    len_str2 = len(s2) + 1
+
+    # 初始化了一半  剩下一半在下面初始化
+    matrix = [[0] * (len_str2) for i in range(len_str1)]
+
+    for i in range(len_str1):
+        for j in range(len_str2):
+            if i == 0 and j == 0:
+                matrix[i][j] = 0
+            # 初始化矩阵
+            elif i == 0 and j > 0:
+                matrix[0][j] = j
+            elif i > 0 and j == 0:
+                matrix[i][0] = i
+            # flag
+            elif s1[i - 1] == s2[j - 1]:
+                matrix[i][j] = min(matrix[i - 1][j - 1], matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+            else:
+                matrix[i][j] = min(matrix[i - 1][j - 1] + 1, matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+    return matrix[len_str1 - 1][len_str2 - 1]
+
+
+def knn(str, X, Y, k):
+    dis = []
+    for e in X:
+        dis.append(str_dis(e, str))
+    copy_dis = copy.deepcopy(dis)
+    copy_dis.sort()
+    d = copy_dis[k]
+    n = len(X)
+    count_0 = 0
+    count_1 = 0
+    for i in range(n):
+        if dis[i] <= d:
+            if Y[i] == 0:
+                count_0 += 1
+            else:
+                count_1 += 1
+    res = 0
+    prob = 0
+    if count_0 > count_1:
+        res = 0
+    else:
+        res = 1
+    prob = count_1 / (count_0 + count_1)
+    return (res, prob)
+
+
+X_list = np.array(df_trainx)
+Y_list = np.array(df_trainy)
+X_test_list = np.array(df_testx)
+X = []
+Y = []
+X_test = []
+n = len(X)
+k = int(n / 10)
+predict_value = []
+predict_prob = []
+
+for e in X_list:
+    X.extend(e)
+for e in Y_list:
+    Y.extend(e)
+for e in X_test_list:
+    X_test.extend(e)
+
+for e in X_test:
+    val, prob = knn(e, X, Y, k)
+    predict_value.append(val)
+    predict_prob.append(prob)
+
+predict_value = np.array(predict_value)
+predict_prob = np.array(predict_prob)
