@@ -1,0 +1,37 @@
+蛋白质在细胞和生物体的生命活动过程中，起着十分重要的作用。生物的结构和性状都与蛋白质有关，蛋白质还参与基因表达的调节，以及细胞中氧化还原、电子传递、神经传递乃至学习和记忆等多种生命活动过程。在细胞和生物体内各种生物化学反应中起催化作用的酶主要也是蛋白质。 在生物信息学，使用原子位置的均方根误差（RMSD）来度量蛋白质的原子之间的平均距离的量度。现在，我们有一份关于蛋白质结构的数据，我们想利用回归模型建模来预测蛋白质结构的RMSD。
+
+数据说明
+本题原始数据来自UCI里的数据集Physicochemical Properties of Protein Tertiary Structure Data Set。数据集一共包含9个特征变量，1个回归值变量，共45730个样本点。测试模型时，将从各类别中分别抽取80%的数据作为训练集，用剩余样本进行分类结果测试。
+
+列名	说明	类型	示例
+F1	总表面积	Float	6191.96
+F2	非极性暴露面积	Float	1623.16
+F3	非极性暴露残基的部分面积	Float	0.26213
+F4	非极性暴露部分残基的部分面积	Float	53.3894
+F5	分子量加权暴露面积	Float	803446.697
+F6	残基的标准暴露面积平均偏差	Float	87.2024
+F7	欧几里得距离	Float	3328.91
+F8	第二结构惩罚	Int	39
+F9	总表面积	Float	38.5468
+RMSD	空间分布的制约	Float	6.021
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+df_trainx	训练集x	DataFrame
+df_trainy	训练集y	DataFrame
+df_testx	测试集x	DataFrame
+答题要求predict_value = None
+from sklearn.tree import DecisionTreeRegressor
+
+train_x = np.array(df_trainx)
+train_y = np.array(df_trainy)
+test_x = np.array(df_testx)
+
+dtr=DecisionTreeRegressor()
+dtr.fit(train_x,train_y)
+predict_value=dtr.predict(test_x)
+要求基于测试集，根据选择的模型给出预测结果predict_value，为ndarray、series或者DataFrame对象，用于后台对本题正误进行判断及对模型进行评估；
+请不要打乱测试样本的顺序，防止模型评估出现偏差。
+
+代码：
