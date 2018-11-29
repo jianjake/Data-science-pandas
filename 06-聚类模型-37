@@ -1,0 +1,51 @@
+推荐系统利用电子商务网站向客户提供商品信息和建议，帮助用户决定应该购买什么产品，模拟销售人员帮助客户完成购买过程。本题要求根据连衣裙的特征利用PCA降维后，对不同品牌型号的连衣裙进行分类，来判断是否向用户推荐该产品。
+
+数据说明
+本题的数据集采用UCI的Dresses_Attribute_Sales Data Set。数据集中每个样本包含11个特征变量和1个目标变量（即是否推荐）。目标变量并不用于聚类分析，但可用于聚类结果的评估。特征变量的具体含义如下：
+
+列名	说明	类型	示例
+Style	服装风格	String	casual,fashion,work...
+Price	价格	String	Low,Average,Medium,High,Very-High
+Size	大小	String	S,M,L,FREE
+Season	适合季节	String	Autumn，winter，Spring，Summer
+NeckLine	领口	String	backless,board-neck,Bowneck...
+SleeveLength	袖长	full,half,halfsleeves,butterfly...
+waiseline	腰围	String	dropped,empire,natural,princess,null.
+Material	材料	String	wool,cotton,mix etc
+FabricType	织物类型	String	shafoon,jersey,flannel,corduroy etc
+Decoration	装饰	String	applique,beading,flowers etc
+Pattern type	图案样式	String	solid,animal,dot,leapard etc
+Recommendation	是否推荐	Int	0,1
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+df_trainx	训练集	DataFrame
+答题要求
+根据选择的模型给出预测结果predict_value，为ndarray、series或者DataFrame对象，用于后台对本题正误进行判断及对模型进行评估；
+请不要打乱测试样本的顺序，防止模型评估出现偏差。
+
+from sklearn.cluster import KMeans
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import PCA
+import jieba
+
+# 分词及对文本向量化表示
+list_text = [' '.join(word for word in jieba.cut(line) if word != ' ') for line in df_trainx.ix[:, 0]]
+tfidf = TfidfVectorizer(max_df=0.95, stop_words=stopwords).fit(list_text)
+array_trainx = tfidf.transform(list_text).toarray()
+
+# PCA降维
+pca = PCA()
+pca.fit(array_trainx)
+n_component = 0
+while sum(pca.explained_variance_ratio_[0: n_component]) < 0.9:
+    n_component += 1
+pca = PCA(n_components=n_component)
+array_trainx = pca.fit_transform(array_trainx)
+
+# 训练模型
+model = KMeans(n_clusters=2).fit(array_trainx)
+
+# 输出预测结果
+predict_value = model.labels_
