@@ -1,0 +1,20 @@
+Jaccard距离（或相似度）通常用作衡量两个集合之间的相似度——比如Cathy的朋友集合表示为AKahn,Mark,Laura,⋯，Rachel的朋友集合表示为BMladen,Kahn,Mark,⋯，那么两个朋友集合的Jaccard相似度为:
+J(A,B)=| A∩B || A∪B |
+相应地Jaccard距离为:
+1−J(A,B)=1−| A∩B || A∪B |
+请计算Cathy和Rachel两个人朋友集合的Jaccard距离。
+
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+x1	cathy的朋友	ndarray
+x2	Rachel的朋友	ndarray
+答题要求
+根据题目要求，给出计算结果jaccard_dis，用于后台对本题正误进行判断。结果保留两位小数。
+
+jaccard_dis = None
+union_ = list(set(x1).union(set(x2)))
+inser_ = list(set(x1).intersection(set(x2)))
+jaccard_dis = 1 - float(len(inser_)) / float(len(union_))
+jaccard_dis = round(jaccard_dis, 2)
