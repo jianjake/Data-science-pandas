@@ -1,0 +1,29 @@
+体育运动是在一定的天气条件下进行的，天气状况时刻制约着体育运动开展的形式和内容。
+
+本题要求根据当前天气的四种属性（详见数据说明），利用聚类算法，将天气状况划分为适合/不适合玩体育运动两个类别。
+
+数据说明
+数据来自KEEL的数据集Weather data set，共有14个样本点
+
+列名	说明	类型	示例
+Outlook	0-sunny, 1-overcast, 2-rainy	Int	0
+Temperature	0-hot, 1-mild, 2-cool	Int	0
+Humidity	0-high, 1-normal	Int	0
+Windy	0-true, 1-false	Int	1
+Play	0-yes, 1-no	Int	1
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+df_trainx	训练集	DataFrame
+答题要求
+根据选择的模型给出预测结果predict_value，为ndarray、series或者DataFrame对象，用于后台对本题正误进行判断及对模型进行评估；
+请不要打乱测试样本的顺序，防止模型评估出现偏差。
+
+代码：
+predict_value = None
+from sklearn.cluster import KMeans
+import numpy as np
+
+train_x = np.array(df_trainx)
+predict_value = KMeans(n_clusters=2, random_state=0,max_iter=1000,n_init=100).fit(train_x).predict(train_x)
