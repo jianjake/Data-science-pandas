@@ -1,0 +1,20 @@
+在评判回归模型优劣的指标中，平均绝对误差（Mean Absolute Error, MEA）是所有单个观测值与算术平均值的偏差的绝对值的平均。平均绝对误差由于离差被绝对值化，不会出现正负相抵消的情况，因而平均绝对误差较平均误差，能更好的反映预测值误差的实际情况。
+
+平均绝对误差（MAE）的值越小，说明模型选择越合适。平均绝对误差（MAE）的具体定义和公式可以参考“学习>模型评估与选择>性能评价指标”。
+
+本题要求得到线性回归模型的平均绝对误差（MAE）。
+
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+y_pred	模型预测结果	DataFrame
+y_true	真实值	DataFrame
+答题要求
+根据题目要求，给出计算结果mae_value，用于后台对本题正误进行判断。结果保留两位小数。
+
+from sklearn import metrics
+
+mae_value = metrics.mean_absolute_error(y_true, y_pred)
+
+mae_value = round(mae_value, 2)
