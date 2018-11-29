@@ -1,0 +1,42 @@
+数据标准化是将数据按比例缩放到一个特定区间，其主要包括数据同趋化处理和无量纲化处理两个方面。数据标准化的方法有很多种，常用的有最小-最大标准化和z-score标准化。
+
+请用户对本题中的变量(不包括变量ID)进行z-score标准化,标准化公式如下：
+
+Xi′=Xi−μδ
+其中：
+
+μ=∑Ni=1XiN
+δ=∑Ni=1(Xi−μ)2N−1−−−−−−−−−√
+N=样本数
+
+数据说明
+本题数据来自KEEL里的数据集Concrete Compressive Strength data set。数据集一共包含1列id，4列特征变量，共100个样本点。
+
+列名	类型	说明	示例
+ID	Int	ID 样本号	1
+CT	Float	Cement 黏固粉	295.7
+FA	Float	FlyAsh 粉煤灰	98.8
+WT	Float	Water 水	185.6
+SP	Float	SuperPlasticizer 超增塑剂	14.2
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+data	数据集	DataFrame
+答题要求
+对本题中的变量(不包括变量ID)进行z-score标准化，计算结果保存在standard_data中，精确到小数点后三位，类型为DataFrame对象。
+
+正误判定变量standard_data
+
+
+import numpy as np
+import pandas as pd
+
+def standard_scale(col):
+    return (col - col.mean()) / col.std()
+
+
+rest_data = data.iloc[:,1:].apply(standard_scale, axis = 0)
+rest_data = np.round(rest_data, 3)
+
+standard_data = pd.concat([data[['ID']], rest_data], axis = 1)
