@@ -1,0 +1,33 @@
+在信息论与概率论中，熵（entropy）是表示随机变量不确定性的度量，设Y是一个取有限个值得离散随机变量，其概率分布为：
+P(Y=yi)=pi,i=1,2,⋯,n
+则随机变量Y的熵定义为：
+H(Y)=−∑i=1npi log pi
+上式中，若pi=0，则定义0 log 0=0，计算的时候对数以2为底，这时熵的单位称作比特(bit)。由定义可知，熵只依赖于Y的分布，而与Y的具体取值无关。所以也可将Y的熵记作H(p)，即
+H(p)=−∑i=1npi log pi
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+y	一组实数	DataFrame
+答题要求
+根据题目要求，给出计算结果entropy_value，用于后台对本题正误进行判断。结果保留两位小数。
+
+代码：
+import pandas as pd
+from scipy import log2
+import numpy as np
+print(y)
+entropy_value = 0
+y_ = np.array(y)
+y_ = np.squeeze(y_)
+distr = {}
+for i in y_:
+    if distr.get(i) is None:
+        distr[i] = 1
+    else:
+        distr[i] = distr[i] + 1
+for key in distr:
+    p = distr[key] / float(len(y_))
+    entropy_value += - p * log2(p)
+print(distr)
+entropy_value = round(entropy_value, 2)
