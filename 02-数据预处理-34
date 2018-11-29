@@ -1,0 +1,50 @@
+数据标准化是将数据按比例缩放到一个特定区间，其主要包括数据同趋化处理和无量纲化处理两个方面。数据标准化的方法有很多种，常用的有0-1标准化和z-score标准化。
+
+0-1标准化，又称为离差标准化或最大-最小值标准化，该方法的核心即是对数据系列作线性变换，使得处理过后的数据均落在[0,1]区间。
+
+本题要求用户对数据集中的所有特征变量进行0-1标准化。
+
+0-1标准化公式如下：
+
+x∗i=xi−minmax−min
+其中：x∗i为标准化后的各数据点的取值，xi为原始各数据点取值，min为该数据系列中的最小值，max为该数据系列中的最大值。
+
+数据说明
+本题数据来自UCI里的数据集Cloud Data Set。数据集一共包含1列id，10列特征变量，我们在原始数据集上加上特征变量的列名，完整数据集共1024个样本点。
+
+该数据集是两张卫星云图数据。卫星云图由装载在NOAA绕极轨道卫星上的AVHRR仪器拍摄获得，一张图片为visible通道（可见光场），一张图片为IR通道（infrared cloud radiance，红外辐射场）。每张图片分辨率为512x512 pixels，每16x16 pixels的区域看做一个超级像素点（super-pixel），所以共有1024个超级像素点，即1024个样本点。
+
+每个超级像素点的用6个光谱参数和4个纹理参数进行描述：光谱参数为visible和IR通道的最小值、最大值和平均值；纹理参数只由visible得到，它们通过计算超级像素点中相邻像素点之间统计上的差异得到，具体为mean distribution和contrast（the first and second moments of the difference，差异的一阶矩和二阶距），以及angular second momentum（ASM）和entropy of the distribution of differences（差异分布的熵），前面两个纹理参数度量了差异的大小，后面两个纹理参数是差异频率分布的函数，具体含义可以查看此链接。该数据集经常用于特征提取的研究中。
+
+列名	说明	类型	示例
+ID	样本ID号	Int	1
+minimum value visible	visible通道超级像素点的最小灰度值	float	3.0000
+maximum value visible	visible通道超级像素点的最大灰度值	float	124.0000
+mean value visible	visible通道超级像素点的平均灰度值	float	28.5781
+mean distribution visible	visible通道超级像素点的平均灰度值的概率	float	0.0359
+contrast visible	visible通道超级像素点的对比度	float	234.3500
+ASM visible	visible通道超级像素点的ASM能量	float	0.1251
+Entropy visible	visible通道超级像素点的熵	float	2.8862
+minimum value IR	IR通道超级像素点的最小灰度值	float	159.0000
+maximum value IR	IR通道超级像素点的最大灰度值	float	240.0000
+mean value IR	IR通道超级像素点的平均灰度值	float	220.0352
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+data	数据集	DataFrame
+答题要求
+根据题目要求，给出计算结果new_data，类型为DataFrame对象，用于后台对本题正误进行判断。
+
+
+
+import pandas as pd
+import numpy as np
+def standard_scale(col):
+    return (col - col.min()) / (col.max() - col.min())
+
+
+rest_data = data.iloc[:,1:].apply(standard_scale, axis = 0)
+rest_data = np.round(rest_data, 3)
+
+new_data = pd.concat([data[['ID']], rest_data], axis = 1)
