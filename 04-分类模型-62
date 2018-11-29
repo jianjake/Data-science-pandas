@@ -1,0 +1,46 @@
+心脏病是毁害人类健康的一大杀手。在自动诊断中，如果能够通过机器学习建模，根据病人的年龄、性别及仪器检测数据自动进行诊断，将会给医疗系统带来很大的益处。一方面能够大大提高检测效率。另一方面可以降低误判的风险。
+
+本题目基于UCI的Heart Disease Data Sets ，共297个样本。 每一个样本代表一个病人。 每一个样本包含13个自变量和num目标变量，num指示当前的病人的诊断结果。
+
+数据说明
+每一个变量的具体含义和类型说明如下：
+
+列名	类型	说明	示例
+age	Int	年龄/年	35
+sex	Int	性别，男：1女：0	0
+cp	Int	胸腔疼痛类型，1：典型心绞痛2：不典型心绞痛3：非心绞痛4：无症状	4
+trestbps	Int	静息血压/mm Hg	138
+chol	Int	血清胆固醇/mg/dl	183
+fbs	Int	血糖是否大于120mg/dl，1：是0：不是	0
+restecg	Int	1:休息之后得到缓解0：其他	0
+thalach	Int	最大心率	182
+exang	Int	是否是运动导致的心绞痛，1：是0：不是	0
+oldpeak	Float	运动相对静息时的ST depression	1.4
+slope	Int	ST segment的斜率1：上升2：持平3：下降	1
+ca	Int	被荧光标记的血管数	0
+thal	Int	3：正常6：固定缺损7：可逆缺损	3
+num	Int	诊断结果0：正常1，2，3，4：不同程度的心脏病	0
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+df_trainx	训练集x	DataFrame
+df_trainy	训练集y	DataFrame
+df_testx	测试集x	DataFrame
+答题要求
+要求基于测试集，根据选择的模型给出预测结果predict_value，为ndarray、series或者DataFrame对象，用于后台对本题正误进行判断及对模型进行评估；
+请不要打乱测试样本的顺序，防止模型评估出现偏差。
+
+代码：
+predict_value = None
+import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+train_x = np.array(df_trainx)
+train_y = np.array(df_trainy)
+test_x = np.array(df_testx)
+
+clf = SVC(kernel='linear')
+clf.fit(train_x, train_y)
+predict_value = clf.predict(test_x)
