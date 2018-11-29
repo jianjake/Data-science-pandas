@@ -1,0 +1,28 @@
+在实际的机器学习任务中，很多特征不是连续型的实数值，有些是分类值。例如，性别，国籍等等。这类变量不能直接在机器学习的模型中应用。最简单的处理方式是将不同类别随机的映射到一个整数（例如，中国：0，日本：1，美国：2）。但是这种处理方式就将类别特征看成是有序的，很显然不符合实际的情况的。在实际问题中，最常用的方法就是把类别特征转换成二元0、1特征编码，即独热编码（One-Hot Encoding）。具体做法是如果一个类别特征有m种可能，那么这个特征就对应了m个包含0、1的特征，也就是把实际转换成了稀疏特征。
+
+请用户对本题中的变量进行独热编码。
+
+数据说明
+本题数据来自KEEL里的数据集Heart Disease (Cleveland) data set。数据集一共包含1列id，1列特征变量，共100个样本点。
+
+列名	说明	类型	示例
+ID	ID 样本号	Int	1
+Sex	Sex 性别	Character	M
+预设变量
+本题使用的数据变量名、含义及其类型如下：
+
+变量名	含义	类型
+data	数据集	DataFrame
+答题要求
+根据题目要求，给出计算结果coding_data，类型为DataFrame对象，用于后台对本题正误进行判断。其中，coding_data的列名依次为Sex_F，Sex_M，ID。
+
+import pandas as pd
+###去除ID列###
+new_data = data.drop(['ID'], axis=1)
+
+###对每一列变量进行数据编码处理###
+coding_data = pd.get_dummies(new_data, prefix = new_data.columns).astype(int)
+
+###添加ID列###
+coding_data['ID'] = data['ID']
+print(coding_data)
